@@ -23,18 +23,18 @@
       </div>
     </div>
     <div class="text-right">
-      <p class="text-xs text-slate-400">ቀሪ ሂሳብ</p>
-      <p class="text-lg font-bold text-amber-400">240.00 ETB</p>
+      <p class="text-xs text-slate-400">የአካውንት ሁኔታ</p>
+      <p class="text-sm font-bold text-emerald-400">የነቃ አካውንት</p>
     </div>
   </div>
 
   <div class="bg-gradient-to-r from-purple-900 to-indigo-900 p-4 rounded-2xl mb-4 text-center border border-purple-500/30">
     <div class="flex justify-between text-xs text-purple-200 mb-2 font-mono">
-      <span>👥 ተጫዋቾች: <b>284</b>/300</span>
-      <span>💰 ማሰሮ: <b>2,840 ETB</b></span>
+      <span>👥 ተጫዋቾች: <b class="text-amber-400">ያለ ገደብ (Infinite)</b></span>
+      <span>💰 መነሻ ማሰሮ: <b>10 ETB</b></span>
     </div>
     <h1 class="text-3xl font-extrabold tracking-widest text-white my-1" id="timer">00:45</h1>
-    <p class="text-xs text-purple-300">የ 4-Digit ምዝገባ ክፍት ነው</p>
+    <p class="text-xs text-purple-300">የ 4-Digit ማትሪክስ ውድድር ክፍት ነው</p>
   </div>
 
   <p class="text-sm text-slate-400 mb-2 font-medium">👇 ከ 0 እስከ 10 ያሉ 4 ቁጥሮችን ይምረጡ፡</p>
@@ -42,7 +42,7 @@
 
   <div class="bg-[#161e2e] p-4 rounded-2xl border border-slate-800 shadow-xl mb-4">
     <div class="text-sm mb-3 text-slate-300 bg-[#1f2a3d] p-3 rounded-xl font-mono min-h-[44px]" id="feedback">
-      💡 ቁጥሮችን ሲነኩ የቲኬቱ Odds እና ዝርዝር መረጃ እዚህ ይታያል።
+      💡 ቁጥሮችን ሲነኩ የቲኬቱ ዝርዝር መረጃ እዚህ ይታያል።
     </div>
     <button id="buy-btn" class="w-full bg-amber-500 text-slate-950 font-bold py-3.5 rounded-xl text-center shadow-lg text-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" disabled>
       🕹️ በ 10 ብር ቲኬቱን ግዛ
@@ -53,8 +53,8 @@
     <h3 class="text-sm font-bold text-slate-200 mb-2">💳 አካውንት በፍጥነት መሙያ (Telebirr)</h3>
     <p class="text-xs text-slate-400 mb-3">በቴሌብር ወደ ቁጥር <b class="text-amber-400 select-all font-mono">0903069581</b> ብር ከላኩ በኋላ የደረሰዎትን SMS ከስር ይለጥፉ፡</p>
     <textarea id="sms-text" rows="2" class="w-full p-2.5 bg-[#0b0f19] border border-slate-600 rounded-lg text-xs text-slate-300 focus:outline-none focus:border-amber-500" placeholder="የቴሌብር SMS መልእክቱን እዚህ ይለጥፉ..."></textarea>
-    <button onclick="submitSMS()" class="w-full mt-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold py-2 rounded-lg cursor-pointer">
-      🚀 ብርነቱን አረጋግጥና አስገባ
+    <button onclick="submitSMS()" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 text-xs font-black py-2.5 rounded-lg cursor-pointer shadow-md">
+      🚀 ብርነቱን ቦቱ ላይ አረጋግጥ
     </button>
   </div>
 
@@ -64,10 +64,10 @@
         <svg class="w-10 h-10 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
       </div>
       <h2 class="text-2xl font-black text-emerald-400 mb-1">SUCCESS</h2>
-      <p class="text-sm text-slate-300 font-medium mb-4">እንኳን ደስ አለዎት! የ 4-Digit ማትሪክስ ጦርነትን አሸንፈዋል!</p>
+      <p class="text-sm text-slate-300 font-medium mb-4">እንኳን ደስ አለዎት! የ 4-Digit ማትሪክስ ቲኬትዎን በተሳካ ሁኔታ ቆርጠዋል!</p>
       <div class="bg-emerald-950/50 border border-emerald-500/30 p-3 rounded-xl mb-4">
-        <p class="text-xs text-emerald-300">የተጣራ የሽልማት መጠን</p>
-        <p class="text-2xl font-mono font-black text-emerald-400">600.00 ETB</p>
+        <p class="text-xs text-emerald-300">የተከፈለው የቲኬት ዋጋ</p>
+        <p class="text-2xl font-mono font-black text-emerald-400">10.00 ETB</p>
       </div>
       <button onclick="closeModal()" class="w-full bg-emerald-500 text-slate-950 font-bold py-2.5 rounded-xl cursor-pointer">
         🕹️ መጫወቴን እቀጥላለሁ
@@ -96,7 +96,7 @@
           btn.classList.replace('border-amber-400', 'border-slate-700');
           btn.classList.remove('bg-indigo-950/80');
         } else {
-          if (selected.length >= 4) { if(tg) tg.HapticFeedback.notificationOccurred('error'); alert("⚠️ 4 ቁጥር ብቻ!"); return; }
+          if (selected.length >= 4) { if(tg) tg.HapticFeedback.notificationOccurred('error'); alert("⚠️ 4 ቁጥር ብቻ ይምረጡ!"); return; }
           selected.push(i);
           btn.classList.replace('border-slate-700', 'border-amber-400');
           btn.classList.add('bg-indigo-950/80');
@@ -107,27 +107,42 @@
       grid.appendChild(btn);
     }
 
+    // የውሸት ቁጥሮችን አጽድተን እውነተኛ መረጃ ብቻ የምናሳይበት UI
     function updateUI() {
       if(selected.length === 0) { feedback.innerHTML = "💡 ቁጥሮችን ይምረጡ።"; buyBtn.disabled = true; return; }
       buyBtn.disabled = selected.length !== 4;
       const str = [...selected].sort((a,b)=>a-b).join(', ');
       if(selected.length === 4) {
-        const fakeBuyers = Math.floor(Math.random() * 40) + 1;
-        feedback.innerHTML = fakeBuyers > 25 ? `🎵 ቲኬት: [${str}]<br>📊 የገዙት: <b>${fakeBuyers} ሰው</b> (Low Chance 📉)<br>💵 ድርሻዎ: <b>80.00 ETB</b>` : `🔥 ቲኬት: [${str}]<br>📊 የገዙት: <b>2 ሰው ብቻ</b> (High Chance 📈)<br>💵 ድርሻዎ: <b>1,800.00 ETB</b>`;
+        feedback.innerHTML = `🎯 <b>የተመረጠው ቲኬት:</b> [${str}]<br>💵 <b>የቲኬት ዋጋ:</b> 10.00 ETB`;
       } else { feedback.innerHTML = `⏳ የቀሩ ቁጥሮች: <b>${4 - selected.length}</b> (ጥምረት: ${str})`; }
     }
 
     buyBtn.onclick = () => {
+      buyBtn.disabled = true;
       buyBtn.innerText = "⏳ በመመዝገብ ላይ...";
       setTimeout(() => {
         document.getElementById('success-modal').classList.remove('hidden');
         if(tg) tg.HapticFeedback.notificationOccurred('success');
         buyBtn.innerText = "🕹️ በ 10 ብር ቲኬቱን ግዛ";
-      }, 2000);
+        buyBtn.disabled = false;
+      }, 1500);
     };
 
     function closeModal() { document.getElementById('success-modal').classList.add('hidden'); }
-    function submitSMS() { const txt = document.getElementById('sms-text').value; if(txt) { alert("⏳ መልእክቱ ወደ ቦቱ እየተላከ ነው..."); document.getElementById('sms-text').value = ''; } }
+
+    // ቴሌብር ሲነካ ቀጥታ ወደ ቦቱ ቻት እንዲመራ የሚያደርግ ሲስተም
+    function submitSMS() {
+      const txt = document.getElementById('sms-text').value;
+      if(!txt.trim()) {
+        alert("⚠️ እባክዎ መጀመሪያ የቴሌብር SMS መልእክቱን እዚህ ሳጥን ውስጥ ይለጥፉ!");
+        return;
+      }
+      alert("⏳ የቴሌብር ኮድዎን ለማረጋገጥ አሁን ቀጥታ ወደ ቦቱ ይዛወራሉ። እዚያ ላይ መልእክቱን ይላኩት!");
+      document.getElementById('sms-text').value = '';
+      if(tg) {
+        tg.close(); // ሚኒ አፑን ዘግቶ ቀጥታ ወደ ቦቱ ቻት ይመልሰዋል
+      }
+    }
   </script>
 </body>
 </html>
