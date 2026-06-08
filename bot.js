@@ -1,6 +1,5 @@
 const { Bot, InlineKeyboard } = require("grammy");
 const express = require("express");
-const fs = require("fs"); // አዳዲስ ተጠቃሚዎችን በቋሚነት ለመመዝገብና ለመቁጠር
 
 const BOT_TOKEN = "8833378757:AAHb7x04h9y3YdwQ4-tji4w8srxN94sOXcg";
 const TELEBIRR_NUMBER = "0903069581";
@@ -13,39 +12,32 @@ const BOT_LOGO_URL = "https://raw.githubusercontent.com/bayeamlaku565-cloud/gurs
 
 const bot = new Bot(BOT_TOKEN);
 const usedTxIds = new Set();
-const USERS_FILE = "users.json";
 
-// የደህንነት ሰርቨር ለ Render
+// 👥 Render እንዳይዘጋ በሰላም ተጠቃሚዎችን በMemory መቁጠሪያ (Safe Database)
+const activeUsers = new Set();
+
+// መጀመሪያ ቦቱ ሲጀምር ባዶ እንዳይሆን ቤዝመንት (ቀስ በቀስ እውነተኛ ሰዎች ሲገቡ ይጨምራል)
+activeUsers.add(58392019); // Sample User 1
+
+// የደህንነት ሰርቨር ለ Render የወደብ ችግር መከላከያ
 const app = express();
 const PORT = process.env.PORT || 10000;
 app.get("/", (req, res) => res.send("Gursha Lucky Live Member Counter Server Run!"));
 app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
 
-// ተጠቃሚዎችን ከፋይል ላይ አንብቦ የሚቆጥር ተግባር (Database Counter)
+// ተጠቃሚዎችን ቆጥሮ ልክ እንደ Beteseb Bingo "X users" የሚል ተግባር
 function getMemberCount(userId) {
-  let users = [];
-  try {
-    if (fs.existsSync(USERS_FILE)) {
-      users = JSON.parse(fs.readFileSync(USERS_FILE, "utf8"));
-    }
-  } catch (e) {
-    console.log("Error reading users file, resetting...");
+  if (userId) {
+    activeUsers.add(userId); // አዲስ ሰው ሲገባ ዝርዝሩ ውስጥ ይጨምረዋል
   }
-
-  // አዲስ ሰው ከሆነ ወደ ዝርዝሩ ጨምረው
-  if (userId && !users.includes(userId)) {
-    users.push(userId);
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users), "utf8");
-  }
-
-  const count = users.length;
-  // 1 ሰው ሲሆን "1 user" ከ 1 በላይ ሲሆን "2 users", "3 users"... እያለ እንዲቀጥል ማድረጊያ
+  
+  const count = activeUsers.size;
+  // 1 ሰው ሲሆን "1 user"፣ ከዛ በላይ ሲሆን "2 users", "3 users"... እያለ ይቀጥላል
   return count === 1 ? "1 user" : `${count.toLocaleString()} users`;
 }
 
 bot.command("start", async (ctx) => {
   const userId = ctx.from.id;
-  // አባላቱን ቆጥሮ "X users" የሚለውን ያዘጋጃል
   const currentMembers = getMemberCount(userId);
 
   // 10ሩም ተንቀሳቃሽ (Inline) ቁልፎች
@@ -68,7 +60,7 @@ bot.command("start", async (ctx) => {
   // የድሮ ቁልፎችን ማጽጃ
   await ctx.reply("⏳ ሲስተሙ እየተዘጋጀ ነው...", { reply_markup: { remove_keyboard: true } });
 
-  // ልክ እንደ Beteseb Bingo "bot" ከሚለው ፋንታ የአባላት ብዛትን ከላይ አድርጎ መላኪያ
+  // "bot" ከሚለው ጽሑፍ ፋንታ በላክኸው የBeteseb Bingo ስታይል "X users" የሚለውን ከላይ አድርጎ መላኪያ
   await ctx.replyWithPhoto(BOT_LOGO_URL, {
     caption: `👥 **Gursha Lucky** • ${currentMembers}\n\n👋 ሰላም @${ctx.from.username || "ተጫዋች"}! ወደ ጉርሻ ማትሪክስ በሰላም መጡ።\n\n👇 ከታች ካሉት አማራጮች አንዱን በመጫን ፈጣን አገልግሎት ያግኙ፡`,
     parse_mode: "Markdown",
@@ -107,7 +99,7 @@ bot.on("callback_query:data", async (ctx) => {
   }
 });
 
-// የቴሌብር SMS ኢንጂን
+// የቴሌብር SMS ማረጋገጫ
 bot.on("message:text", async (ctx) => {
   const text = ctx.message.text;
   
@@ -134,4 +126,4 @@ bot.on("message:text", async (ctx) => {
 });
 
 bot.start();
-console.log("🚀 Gursha Lucky with Live Dynamic Member Counter Engine Started...");
+console.log("🚀 Gursha Lucky Bot Cleaned and Running Smoothly...");
