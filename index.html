@@ -31,10 +31,10 @@
   <div class="bg-gradient-to-r from-purple-900 to-indigo-900 p-4 rounded-2xl mb-4 text-center border border-purple-500/30">
     <div class="flex justify-between text-xs text-purple-200 mb-2 font-mono">
       <span>👥 ተጫዋቾች: <b class="text-amber-400">ያለ ገደብ (Infinite)</b></span>
-      <span>💰 መነሻ ማሰሮ: <b>10 ETB</b></span>
+      <span>💰 የዕድል ፈንድ: <b>10 ETB</b></span>
     </div>
     <h1 class="text-3xl font-extrabold tracking-widest text-white my-1" id="timer">00:45</h1>
-    <p class="text-xs text-purple-300">የ 4-Digit ማትሪክስ ውድድር ክፍት ነው</p>
+    <p class="text-xs text-purple-300">የ 4-Digit ማትሪክስ ግጥሚያ ክፍት ነው</p>
   </div>
 
   <p class="text-sm text-slate-400 mb-2 font-medium">👇 ከ 0 እስከ 10 ያሉ 4 ቁጥሮችን ይምረጡ፡</p>
@@ -64,7 +64,7 @@
         <svg class="w-10 h-10 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
       </div>
       <h2 class="text-2xl font-black text-emerald-400 mb-1">SUCCESS</h2>
-      <p class="text-sm text-slate-300 font-medium mb-4">እንኳን ደስ አለዎት! የ 4-Digit ማትሪክስ ቲኬትዎን በተሳካ ሁኔታ ቆርጠዋል!</p>
+      <p class="text-sm text-slate-300 font-medium mb-4">እንኳን ደስ አለዎት! የ 4-Digit ማትሪክስ አደንን በተሳካ ሁኔታ አጠናቀዋል!</p>
       <div class="bg-emerald-950/50 border border-emerald-500/30 p-3 rounded-xl mb-4">
         <p class="text-xs text-emerald-300">የተከፈለው የቲኬት ዋጋ</p>
         <p class="text-2xl font-mono font-black text-emerald-400">10.00 ETB</p>
@@ -107,7 +107,6 @@
       grid.appendChild(btn);
     }
 
-    // የውሸት ቁጥሮችን አጽድተን እውነተኛ መረጃ ብቻ የምናሳይበት UI
     function updateUI() {
       if(selected.length === 0) { feedback.innerHTML = "💡 ቁጥሮችን ይምረጡ።"; buyBtn.disabled = true; return; }
       buyBtn.disabled = selected.length !== 4;
@@ -130,7 +129,6 @@
 
     function closeModal() { document.getElementById('success-modal').classList.add('hidden'); }
 
-    // ቴሌብር ሲነካ ቀጥታ ወደ ቦቱ ቻት እንዲመራ የሚያደርግ ሲስተም
     function submitSMS() {
       const txt = document.getElementById('sms-text').value;
       if(!txt.trim()) {
@@ -140,7 +138,7 @@
       alert("⏳ የቴሌብር ኮድዎን ለማረጋገጥ አሁን ቀጥታ ወደ ቦቱ ይዛወራሉ። እዚያ ላይ መልእክቱን ይላኩት!");
       document.getElementById('sms-text').value = '';
       if(tg) {
-        tg.close(); // ሚኒ አፑን ዘግቶ ቀጥታ ወደ ቦቱ ቻት ይመልሰዋል
+        tg.close();
       }
     }
   </script>
