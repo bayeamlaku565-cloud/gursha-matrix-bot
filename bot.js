@@ -4,27 +4,38 @@ const { Bot, InlineKeyboard } = require("grammy");
 const BOT_TOKEN = "8833378757:AAHb7x04h9y3YdwQ4-tji4w8srxN94sOXcg";
 const TELEBIRR_NUMBER = "0903069581";
 const MERCHANT_NAME = "GURSHA MATRIX";
+// ያንተ የኪትሃብ ፔጅ ቀጥታ ሊንክ
+const MINI_APP_URL = "https://bayeamlaku565-cloud.github.io/gursha-matrix-bot/";
 
 const bot = new Bot(BOT_TOKEN);
 const usedTxIds = new Set(); // የቆዩ ኮዶች መከላከያ
 
-// 1. /start ሲባል ሚኒ አፑን መክፈቻ ቁልፍ ማሳየት
+// 1. /start ሲባል የድሮውን ቁልፍ አጥፍቶ አዲሱን ሚኒ አፕ መክፈቻ ማሳያ
 bot.command("start", async (ctx) => {
-  const miniAppUrl = `https://${ctx.me.username}.github.io/`; // የኪትሀብ ፔጅ ሊንክ እዚህ በራስ-ሰር ይተካበታል
-
   const keyboard = new InlineKeyboard()
-    .webApp("🕹️ ወደ ማትሪክስ ጦርነት ግባ", miniAppUrl)
+    .webApp("🕹️ ወደ ማትሪክስ ጦርነት ግባ", MINI_APP_URL)
     .row()
     .url("📢 የጉርሻ ቻናል", "https://t.me/Larrybrezzyeee");
 
+  // በመጀመሪያ የድሮውን ቁልፍ ከስልካቸው ላይ እናጠፋዋለን
+  await ctx.reply("⏳ የድሮው ሲስተም እየጸዳ ነው...", {
+    reply_markup: { remove_keyboard: true }
+  });
+
+  // በመቀጠል አዲሱን የሚኒ አፕ መክፈቻ መልዕክት እንልካለን
   await ctx.reply(`
 👋 ሰላም @${ctx.from.username || "ተጫዋች"}! ወደ **Gursha Matrix** እንኳን መጡ!
 
-🔥 ይህ ከ 0-10 ባሉ ቁጥሮች የሚሰራው የ 4-Digit Blackout ሱስ አስያዥ ጨዋታ ነው።
+🔥 የድሮው ሲስተም ሙሉ በሙሉ ተቀይሮ በአዲሱ የ 4-Digit Blackout ማትሪክስ ተተክቷል።
 
 💳 **አካውንት ለመሙላት፦**
 በቴሌብር ወደ ቁጥር \`${TELEBIRR_NUMBER}\` ብር ከላኩ በኋላ፣ የመጣሎትን የጽሑፍ መልእክት (SMS) ሙሉ በሙሉ ኮፒ አድርገው እዚህ ላይ ይላኩት።
-  `, { parse_mode: "Markdown", reply_markup: keyboard });
+
+ዝግጁ ከሆኑ ከስር ያለውን ቁልፍ ተጭነው ይግቡ👇
+  `, { 
+    parse_mode: "Markdown", 
+    reply_markup: keyboard 
+  });
 });
 
 // 2. የቴሌብር SMS መፍቻ ኢንጂን (SMS Parser)
@@ -32,7 +43,6 @@ bot.on("message:text", async (ctx) => {
   const text = ctx.message.text;
 
   if (text.includes("Transaction No:") && text.includes("sent")) {
-    // Regex ተጠቅሞ መረጃዎችን መቆንጠጫ
     const txMatch = text.match(/Transaction No:\s*([A-Z0-9]+)/i);
     const amountMatch = text.match(/sent\s*([0-9.]+)\s*ETB/i);
 
@@ -52,7 +62,7 @@ bot.on("message:text", async (ctx) => {
 
     await ctx.reply(`🎉 **የቴሌብር ማረጋገጫ ተጠናቋል!**\n💰 መጠን: **${amount} ETB**\n🔑 ID: \`${txId}\`\n\nወደ ሚኒ አፑ በመመለስ መጫወት ይችላሉ!`, { parse_mode: "Markdown" });
   } else {
-    await ctx.reply("❓ እባክዎ የቴሌብር SMS መልእክቱን ሙሉ በሙሉ ኮፒ አድርገው እዚህ ይላኩት።");
+    await ctx.reply("❓ እባክዎ የቴሌብር SMS መልእክቱን ሙሉ በሙሉ ኮፒ አድርገው እዚህ ይላኩት። ለመጫወት /start ብለው ይጻፉ።");
   }
 });
 
