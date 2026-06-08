@@ -1,5 +1,5 @@
 const { Bot, InlineKeyboard } = require("grammy");
-const http = require("http");
+const express = require("express"); // Render የወደብ ችግር እንዳያመጣ በ Express እንተካው
 
 const BOT_TOKEN = "8833378757:AAHb7x04h9y3YdwQ4-tji4w8srxN94sOXcg";
 const TELEBIRR_NUMBER = "0903069581";
@@ -7,29 +7,31 @@ const MERCHANT_NAME = "GURSHA MATRIX";
 const MINI_APP_URL = "https://bayeamlaku565-cloud.github.io/gursha-matrix-bot/";
 const CHANNEL_URL = "https://t.me/Larrybrezzyeee"; 
 
-// 📸 ያንተ የቦት Logo ወይም ፎቶ ሊንክ (አሁን በነጻ የኢንተርኔት ፎቶ ተተክቷል፣ በፈለግከው መቀየር ትችላለህ)
+// 📸 የቦትህ ውብ Logo (ይህንን ሊንክ በራስህ Logo ፎቶ መቀየር ትችላለህ)
 const BOT_LOGO_URL = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500";
 
 const bot = new Bot(BOT_TOKEN);
 const usedTxIds = new Set();
 
-// Render ሰርቨር እንዳይዘጋ መከላከያ
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Bot is running perfectly\n");
-});
+// 🌐 Render የወደብ (Port Binding) ስህተት እንዳያሳይ አስተማማኝ የExpress ሰርቨር
+const app = express();
 const PORT = process.env.PORT || 10000;
-server.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+
+app.get("/", (req, res) => {
+  res.send("Gursha Matrix Bot is Premium and Running!");
 });
 
-// የውሸት ተጫዋቾች ቁጥር መቆጠሪያ (ልክ እንደ ቤተሰብ ቢንጎ ማራኪ እንዲሆን)
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Express server binding successful on port ${PORT}`);
+});
+
+// የውሸት ተጫዋቾች ቁጥር መቆጠሪያ (ለ UX ውበት)
 function getMonthlyUsers() {
-  return "42,850 monthly users";
+  return "45,390 monthly users";
 }
 
 bot.command("start", async (ctx) => {
-  // 10ሩንም ቁልፎች በ 2 ተደራራቢ መስመር (Grid) ማዘጋጃ
+  // የ 10ሩ ቁልፎች ዝግጅት
   const keyboard = new InlineKeyboard()
     .webApp("🕹️ ጨዋታውን ክፈት (Play)", MINI_APP_URL)
     .text("📝 ተመዝገብ (Register)", "reg")
@@ -91,7 +93,7 @@ bot.on("callback_query:data", async (ctx) => {
   } 
   else if (data === "inst") {
     await ctx.answerCallbackQuery();
-    await ctx.reply("📖 **የጨዋታው መመሪያ፦**\n1. 'ጨዋታውን ክፈት' የሚለውን ቁልፍ ይጫኑ።\n2. ከ 0 እስከ 10 ካሉት ቁጥሮች ውስጥ 4ቱን ይምረጡ።\n3. የቲኬት ዋጋ 10 ብር ሲሆን፣ 4ቱም ቁጥሮች በአንድ ላይ ሲወጡ ከፍተኛ ሽልማት ያሸንፋሉ!");
+    await ctx.reply("📖 **የጨዋታው መመሪያ፦**\n1. 'ጨዋታውን ክፈት' የሚለውን ቁልፍ ይጫኑ。\n2. ከ 0 እስከ 10 ካሉት ቁጥሮች ውስጥ 4ቱን ይምረጡ።\n3. የቲኬት ዋጋ 10 ብር ሲሆን፣ 4ቱም ቁጥሮች በአንድ ላይ ሲወጡ ከፍተኛ ሽልማት ያሸንፋሉ!");
   }
 });
 
@@ -111,7 +113,7 @@ bot.on("message:text", async (ctx) => {
     const amount = parseFloat(amountMatch[1]);
 
     if (usedTxIds.has(txId)) {
-      return ctx.reply("⚠️ ይህ የግብይት ቁጥር ቀደም ብሎ ጥቅም ላይ ውሏል!");
+      return ctx.reply("⚠️ ይህ የግብይት ቁጥር ቀደም ብሎ ጥቅም ላይ uglval!");
     }
     
     usedTxIds.add(txId);
