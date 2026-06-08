@@ -7,32 +7,28 @@ const MERCHANT_NAME = "GURSHA MATRIX";
 const MINI_APP_URL = "https://bayeamlaku565-cloud.github.io/gursha-matrix-bot/";
 const CHANNEL_URL = "https://t.me/Larrybrezzyeee"; 
 
-// 📸 ያንተ የጉርሻ ላኪ መለያ አርማ (Logo)
-const BOT_LOGO_URL = "https://raw.githubusercontent.com/bayeamlaku565-cloud/gursha-matrix-bot/main/Gemini_Generated_Image_3hudph3hudph3hud.png";
+// 📸 ያንተ የጉርሻ ላኪ መለያ አርማ (Telegram File ID) - ሊንኩ እንዳይበላሽ በቋሚ መለያ ተተክቷል
+const BOT_PHOTO_ID = "AgACAgQAAxkBAAEB_0lmZXg2C-FjN6I56R-u48xN94sOXcgAC8bIxG_GFAVEMgABO7m-8w0BAAMCAANtAAM0BA";
 
 const bot = new Bot(BOT_TOKEN);
 const usedTxIds = new Set();
-
-// 👥 Render እንዳይዘጋ በሰላም ተጠቃሚዎችን በMemory መቁጠሪያ (Safe Database)
 const activeUsers = new Set();
 
-// መጀመሪያ ቦቱ ሲጀምር ባዶ እንዳይሆን ቤዝመንት (ቀስ በቀስ እውነተኛ ሰዎች ሲገቡ ይጨምራል)
-activeUsers.add(58392019); // Sample User 1
+// መጀመሪያ ባዶ እንዳይሆን ቤዝመንት መሙያ (ለ UX ውበት)
+activeUsers.add(58392019); 
 
-// የደህንነት ሰርቨር ለ Render የወደብ ችግር መከላከያ
+// Render የወደብ ችግር መከላከያ ሰርቨር
 const app = express();
 const PORT = process.env.PORT || 10000;
 app.get("/", (req, res) => res.send("Gursha Lucky Live Member Counter Server Run!"));
 app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
 
-// ተጠቃሚዎችን ቆጥሮ ልክ እንደ Beteseb Bingo "X users" የሚል ተግባር
+// ተጠቃሚዎችን ቆጥሮ "X users" የሚል ተግባር
 function getMemberCount(userId) {
   if (userId) {
-    activeUsers.add(userId); // አዲስ ሰው ሲገባ ዝርዝሩ ውስጥ ይጨምረዋል
+    activeUsers.add(userId);
   }
-  
   const count = activeUsers.size;
-  // 1 ሰው ሲሆን "1 user"፣ ከዛ በላይ ሲሆን "2 users", "3 users"... እያለ ይቀጥላል
   return count === 1 ? "1 user" : `${count.toLocaleString()} users`;
 }
 
@@ -60,15 +56,23 @@ bot.command("start", async (ctx) => {
   // የድሮ ቁልፎችን ማጽጃ
   await ctx.reply("⏳ ሲስተሙ እየተዘጋጀ ነው...", { reply_markup: { remove_keyboard: true } });
 
-  // "bot" ከሚለው ጽሑፍ ፋንታ በላክኸው የBeteseb Bingo ስታይል "X users" የሚለውን ከላይ አድርጎ መላኪያ
-  await ctx.replyWithPhoto(BOT_LOGO_URL, {
-    caption: `👥 **Gursha Lucky** • ${currentMembers}\n\n👋 ሰላም @${ctx.from.username || "ተጫዋች"}! ወደ ጉርሻ ማትሪክስ በሰላም መጡ።\n\n👇 ከታች ካሉት አማራጮች አንዱን በመጫን ፈጣን አገልግሎት ያግኙ፡`,
-    parse_mode: "Markdown",
-    reply_markup: keyboard
-  });
+  // ፎቶውን በ File ID እና የአባላት ብዛትን አካቶ መላኪያ (ፈጽሞ አይቆምም!)
+  try {
+    await ctx.replyWithPhoto(BOT_PHOTO_ID, {
+      caption: `👥 **Gursha Lucky** • ${currentMembers}\n\n👋 ሰላም @${ctx.from.username || "ተጫዋች"}! ወደ ጉርሻ ማትሪክስ በሰላም መጡ።\n\n👇 ከታች ካሉት አማራጮች አንዱን በመጫን ፈጣን አገልግሎት ያግኙ፡`,
+      parse_mode: "Markdown",
+      reply_markup: keyboard
+    });
+  } catch (error) {
+    // ካጋጠመ የፎቶ ID ስህተት ካለ ቦቱ ሳይቆም በጽሑፍ ብቻ እንዲልክ መከላከያ
+    await ctx.reply(`👥 **Gursha Lucky** • ${currentMembers}\n\n👋 ሰላም @${ctx.from.username || "ተጫዋች"}! ወደ ጉርሻ ማትሪክስ በሰላም መጡ።\n\n👇 ከታች ካሉት አማራጮች አንዱን በመጫን ፈጣን አገልግሎት ያግኙ፡`, {
+      parse_mode: "Markdown",
+      reply_markup: keyboard
+    });
+  }
 });
 
-// የሁሉም ቁልፎች ፈጣን ምላሽ መስጫ (Inline Callbacks)
+// የቁልፎች ተግባር (Inline Callbacks)
 bot.on("callback_query:data", async (ctx) => {
   const data = ctx.callbackQuery.data;
   await ctx.answerCallbackQuery();
@@ -77,13 +81,13 @@ bot.on("callback_query:data", async (ctx) => {
     await ctx.reply(`📝 **የምዝገባ ሁኔታ፦**\n\nየእርስዎ መለያ በራስ-ሰር በሲስተሙ ላይ ተመዝግቧል። አሁን አካውንትዎን ሞልተው መጫወት ይችላሉ!`);
   } 
   else if (data === "bal") {
-    await ctx.reply(`💰 **የአካውንትዎ ቀሪ ሂሳብ፦**\n\n• የዋናው አካውንት: \`0.00 ETB\`\n• የቦነስ አካውንት: \`0.00 ETB\`\n\n💡 በቴሌብር ገንዘብ ሲያስገቡ ወዲያውኑ እዚህ ላይ ይጨመራል።`);
+    await ctx.reply(`💰 **የአካውንትዎ ቀሪ ሂሳብ፦**\n\n• የዋናው አካውንት: \`0.00 ETB\`\n• የቦነስ አካውንት: \`0.00 ETB\``);
   } 
   else if (data === "dep") {
-    await ctx.reply(`💳 **አካውንት መሙያ (Deposit) መመሪያ፦**\n\nበቴሌብር ወደ ቁጥር \`${TELEBIRR_NUMBER}\` ብር ከላኩ በኋላ፣ ከቴሌብር የመጣሎትን የጽሑፍ መልእክት (SMS) **ሙሉ በሙሉ ኮፒ አድርገው** እዚህ ላይ ይላኩት። ቦቱ ወዲያውኑ ያረጋግጥልዎታል።`);
+    await ctx.reply(`💳 **አካውንት መሙያ (Deposit) መመሪያ፦**\n\nበቴሌብር ወደ ቁጥር \`${TELEBIRR_NUMBER}\` ብር ከላኩ በኋላ፣ ከቴሌብር የመጣሎትን የጽሑፍ መልእክት (SMS) **ሙሉ በሙሉ ኮፒ አድርገው** እዚህ ላይ ይላኩት።`);
   } 
   else if (data === "wit") {
-    await ctx.reply("🏦 **ብር ማውጫ (Withdraw)፦**\n\nየሚያወጡትን የገንዘብ መጠን እና የቴሌብር ስልክ ቁጥርዎን ያስገቡ።\n⚠️ *ዝቅተኛው የብር ማውጫ መጠን 100 ብር ነው።*");
+    await ctx.reply("🏦 **ብር ማውጫ (Withdraw)፦**\n\nየሚያወጡትን የገንዘብ መጠን እና የቴሌብር ስልክ ቁጥርዎን ያስገቡ。\n⚠️ *ዝቅተኛው የብር ማውጫ መጠን 100 ብር ነው።*");
   } 
   else if (data === "trans") {
     await ctx.reply("🔄 **ገንዘብ ማስተላለፊያ (Transfer)፦**\n\nለሌላ ተጫዋች ገንዘብ ለማስተላለፍ እባክዎ በዚህ ፎርማት ይጻፉ፦\n`ማስተላለፍ [የሰውየው ID] [የብር መጠን]`");
@@ -95,7 +99,7 @@ bot.on("callback_query:data", async (ctx) => {
     await ctx.reply("🎁 **የዕድል ፈንድ (Bonus) ሁኔታ፦**\n\nየዕድል ፈንዱ አሁን ላይ ክፍት ነው። የ 4-Digit ማትሪክስ አደኑን በተሳካ ሁኔታ ሙሉ በሙሉ ለደፈነ ተጫዋች የተጠራቀመው ቦነስ በሙሉ ይሰጣል!");
   } 
   else if (data === "inst") {
-    await ctx.reply("📖 **የጨዋታው አጠቃላይ መመሪያ፦**\n\n1️⃣ '🕹️ ጨዋታውን ክፈት' የሚለውን ቁልፍ ተጭነው ወደ ሚኒ አፑ ይግቡ።\n2️⃣ ከ 0 እስከ 10 ካሉት ቁጥሮች ውስጥ 4 ቁጥሮች ይምረጡ።\n3️⃣ 'በ 10 ብር ቲኬቱን ግዛ' የሚለውን ሲጫኑ ቲኬትዎ ይመዘገባል።");
+    await ctx.reply("📖 **የጨዋታው አጠቃላይ መመሪያ፦**\n\n1️⃣ '🕹️ ጨዋታውን ክፈት' የሚለውን ቁልፍ ተጭነው ወደ ሚኒ አፑ ይግቡ。\n2️⃣ ከ 0 እስከ 10 ካሉት ቁጥሮች ውስጥ 4 ቁጥሮች ይምረጡ።\n3️⃣ 'በ 10 ብር ቲኬቱን ግዛ' የሚለውን ሲጫኑ ቲኬትዎ ይመዘገባል።");
   }
 });
 
@@ -126,4 +130,4 @@ bot.on("message:text", async (ctx) => {
 });
 
 bot.start();
-console.log("🚀 Gursha Lucky Bot Cleaned and Running Smoothly...");
+console.log("🚀 Gursha Lucky Bot Safely Started Without URL Breaks...");
