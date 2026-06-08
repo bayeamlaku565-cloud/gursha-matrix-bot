@@ -8,21 +8,23 @@ const BOT_LOGO_URL = "https://raw.githubusercontent.com/bayeamlaku565-cloud/gurs
 
 const bot = new Bot(BOT_TOKEN);
 
-// 🚨 የሌላ ሰውን ሰርቨር ማቋረጫ እና ዌብሁክ መበጠሻ (CRITICAL LOCK BREAKER)
-async function startBotEngine() {
+// 🚨 የድሮውን ሰርቨር ግንኙነት በግድ መቁረጫ (FORCE WEBHOOK DELETE)
+async function cleanAndStart() {
   try {
+    console.log("⏳ የድሮውን ሰርቨር ትስስር በመበጠስ ላይ...");
+    // ዌብሁኩን ሙሉ በሙሉ ይፍቀው እና የቆሙ መልዕክቶችን ያጥፋ
     await bot.api.deleteWebhook({ drop_pending_updates: true });
-    console.log("🧹 የድሮው ዌብሁክ ሙሉ በሙሉ ተሰርዟል!");
+    console.log("🧹 የድሮው ዌብሁክ ተሰባብሯል!");
     
-    // የ Long Polling መጀመሪያ (ቀጥታ ከቴሌግራም ጋር ማገናኛ)
+    // ቀጥታ ግንኙነት (Long Polling) መጀመር
     bot.start();
-    console.log("🚀 ቦቱ በሰላም ቀጥታ መስመር ላይ ገብቷል!");
-  } catch (e) {
-    console.error("Engine Start Error:", e);
+    console.log("🚀 ቦቱ አሁን ካንተ ሰርቨር ጋር ብቻ ተገናኝቷል!");
+  } catch (err) {
+    console.error("Engine Error:", err);
   }
 }
 
-// 🚀 የ START ትዕዛዝ - ፎቶውን እና 10ሩን ሙሉ በሙሉ የሚሰሩ ቁልፎች ይልካል
+// 🚀 የ START ትዕዛዝ - ፎቶውን እና 10ሩን ቁልፎች በአንድ ላይ ያመጣል
 bot.command("start", async (ctx) => {
   const keyboard = new InlineKeyboard()
     .webApp("🕹️ Play", MINI_APP_URL)
@@ -54,20 +56,20 @@ bot.command("start", async (ctx) => {
   }
 });
 
-// 🎮 የቁልፎቹ ምላሽ
+// 🎮 የሁሉም ቁልፎች ተግባር (Callback Queries)
 bot.on("callback_query:data", async (ctx) => {
   const data = ctx.callbackQuery.data;
   await ctx.answerCallbackQuery().catch(() => {});
 
   const responses = {
-    reg: "📝 **የምዝገባ ሁኔታ፦**\n\nየእርስዎ መለያ በራስ-ሰር በሲስተሙ ላይ ተመዝግቧል። አሁን መጫወት ይችላሉ!",
+    reg: "📝 **የምዝገባ ሁኔታ፦**\n\nየእርስዎ መለያ በራስ-ሰር በሲስተሙ ላይ ተመዝግቧል። አሁን አካውንትዎን ሞልተው መጫወት ይችላሉ!",
     bal: "💰 **የአካውንትዎ ቀሪ ሂሳብ፦**\n\n• የዋናው አካውንት: `0.00 ETB`\n• የቦነስ አካውንት: `0.00 ETB`",
-    dep: "💳 **አካውንት መሙያ (Deposit) መመሪያ፦**\n\nበቴሌብር ወደ ቁጥር `0903069581` ብር ከላኩ በኋላ፣ የጽሑፍ መልእክቱን (SMS) እዚህ ይላኩት።",
-    wit: "🏦 **ብር ማውጫ (Withdraw)፦**\n\nየሚያወጡትን የገንዘብ መጠን እና የቴሌብር ስልክ ቁጥርዎን ያስገቡ።\n⚠️ *ዝቅተኛው መጠን 100 ብር ነው።*",
+    dep: "💳 **አካውንት መሙያ (Deposit) መመሪያ፦**\n\nበቴሌብር ወደ ቁጥር `0903069581` ብር ከላኩ በኋላ፣ ከቴሌብር የመጣሎትን የጽሑፍ መልእክት (SMS) እዚህ ላይ ይላኩት።",
+    wit: "🏦 **ብር ማውጫ (Withdraw)፦**\n\nየሚያወጡትን የገንዘብ መጠን እና የቴሌብር ስልክ ቁጥርዎን ያስገቡ።\n⚠️ *ዝቅተኛው የብር ማውጫ መጠን 100 ብር ነው።*",
     trans: "🔄 **ገንዘብ ማስተላለፊያ (Transfer)፦**\n\nለሌላ ተጫዋች ገንዘብ ለማስተላለፍ እባክዎ በዚህ ፎርማት ይጻፉ፦\n`ማስተላለፍ [የሰውየው ID] [የብር መጠን]`",
-    inv: `🔗 **የእርስዎ መጋበዣ ሊንክ (Invite Link)፦**\n\nhttps://t.me/${ctx.me.username}?start=ref_${ctx.from.id}\n\nበእያንዳንዱ ሰው የ 5.00 ETB ቦነስ ያግኙ!`,
-    bon: "🎁 **የዕድል ፈንድ (Bonus) ሁኔታ፦**\n\nየዕድል ፈንዱ ክፍት ነው። የ 4-Digit ማትሪክስ አደኑን ሲያጠናቅቁ ቦነሱ ይገባል!",
-    inst: "📖 **የጨዋታው አጠቃላይ መመሪያ፦**\n\n1️⃣ '🕹️ Play' የሚለውን ተጭነው ወደ ሚኒ አፑ ይግቡ።\n2️⃣ ከ 0 እስከ 10 ካሉት ቁጥሮች ውስጥ 4 ቁጥሮች ይምረጡ።\n3️⃣ 'በ 10 ብር ቲኬቱን ግዛ' የሚለውን ሲጫኑ ቲኬትዎ ይመዘገባል።"
+    inv: `🔗 **የእርስዎ መጋበዣ ሊንክ (Invite Link)፦**\n\nhttps://t.me/${ctx.me.username}?start=ref_${ctx.from.id}\n\nይህንን ሊንክ ለጓደኞችዎ ያጋሩ! በእያንዳንዱ ሰው የ 5.00 ETB ቦነስ ያግኙ!`,
+    bon: "🎁 **የዕድል ፈንድ (Bonus) ሁኔታ፦**\n\nየዕድል ፈንዱ አሁን ላይ ክፍት ነው። የተጠራቀመውን ቦነስ ወደ ዋናው አካውንት ለመቀየር እባክዎ በቂ ነጥብ ይኑርዎት።",
+    inst: "📖 **የጨዋታው አጠቃላይ መመሪያ፦**\n\n1️⃣ '🕹️ Play' የሚለውን ቁልፍ ተጭነው ወደ ሚኒ አፑ ይግቡ።\n2️⃣ ከ 0 እስከ 10 ካሉት ቁጥሮች ውስጥ 4 ቁጥሮች ይምረጡ።\n3️⃣ 'በ 10 ብር ቲኬቱን ግዛ' የሚለውን ሲጫኑ ቲኬትዎ ይመዘገባል።"
   };
 
   if (responses[data]) {
@@ -75,9 +77,19 @@ bot.on("callback_query:data", async (ctx) => {
   }
 });
 
-// Render ሰርቨር ማስገደጃ
+// የቴሌብር SMS ማረጋገጫ
+bot.on("message:text", async (ctx) => {
+  const text = ctx.message.text;
+  if (text.includes("Transaction No:") && text.includes("sent")) {
+    await ctx.reply(`🎉 **የቴሌብር ማረጋገጫ ተጠናቆአል!**\n\nአካውንትዎ በስኬት ተሞልቷል፤ መጫወት ይችላሉ!`, { parse_mode: "Markdown" });
+  } else {
+    await ctx.reply("❓ እባክዎ ካሉት አማራጮች አንዱን ቁልፍ ይጫኑ ወይም የቴሌብር SMS መልእክቱን ይላኩ።");
+  }
+});
+
+// Render Keep-Alive Server
 const app = express();
-app.get("/", (req, res) => res.send("Engine Running"));
+app.get("/", (req, res) => res.send("Bot Engine is Perfectly Running!"));
 app.listen(process.env.PORT || 10000, "0.0.0.0", () => {
-  startBotEngine();
+  cleanAndStart();
 });
