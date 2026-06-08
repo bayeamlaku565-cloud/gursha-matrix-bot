@@ -8,10 +8,19 @@ const BOT_LOGO_URL = "https://raw.githubusercontent.com/bayeamlaku565-cloud/gurs
 
 const bot = new Bot(BOT_TOKEN);
 
-// 🚨 CRITICAL: የድሮውን የተሳሳተ የዌብሁክ ሊንክ ከቴሌግራም ላይ ሙሉ በሙሉ መደምሰሻ (Force Clean)
-bot.api.deleteWebhook({ drop_pending_updates: true }).then(() => {
-    console.log("🧹 የድሮው ሲስተም ሙሉ በሙሉ ተጠርጓል!");
-}).catch(err => console.log("Webhook clean error:", err));
+// 🚨 የሌላ ሰውን ሰርቨር ማቋረጫ እና ዌብሁክ መበጠሻ (CRITICAL LOCK BREAKER)
+async function startBotEngine() {
+  try {
+    await bot.api.deleteWebhook({ drop_pending_updates: true });
+    console.log("🧹 የድሮው ዌብሁክ ሙሉ በሙሉ ተሰርዟል!");
+    
+    // የ Long Polling መጀመሪያ (ቀጥታ ከቴሌግራም ጋር ማገናኛ)
+    bot.start();
+    console.log("🚀 ቦቱ በሰላም ቀጥታ መስመር ላይ ገብቷል!");
+  } catch (e) {
+    console.error("Engine Start Error:", e);
+  }
+}
 
 // 🚀 የ START ትዕዛዝ - ፎቶውን እና 10ሩን ሙሉ በሙሉ የሚሰሩ ቁልፎች ይልካል
 bot.command("start", async (ctx) => {
@@ -33,7 +42,7 @@ bot.command("start", async (ctx) => {
 
   try {
     await ctx.replyWithPhoto(BOT_LOGO_URL, {
-      caption: `👥 **Gursha Lucky** • 12,450 users\n\n👋 Welcome to Gursha Lucky Matrix! Choose an Option below to start playing.`,
+      caption: `👥 **Gursha Lucky** • 35,493 users\n\n👋 Welcome to Gursha Lucky Matrix! Choose an Option below to start playing.`,
       parse_mode: "Markdown",
       reply_markup: keyboard
     });
@@ -45,7 +54,7 @@ bot.command("start", async (ctx) => {
   }
 });
 
-// 🎮 የቁልፎቹ ምላሽ (Callback)
+// 🎮 የቁልፎቹ ምላሽ
 bot.on("callback_query:data", async (ctx) => {
   const data = ctx.callbackQuery.data;
   await ctx.answerCallbackQuery().catch(() => {});
@@ -66,19 +75,9 @@ bot.on("callback_query:data", async (ctx) => {
   }
 });
 
-// የቴሌብር SMS ማረጋገጫ
-bot.on("message:text", async (ctx) => {
-  const text = ctx.message.text;
-  if (text.includes("Transaction No:") && text.includes("sent")) {
-    await ctx.reply(`🎉 **የቴሌብር ማረጋገጫ ተጠናቆአል!**\n\nአካውንትዎ በስኬት ተሞልቷል፤ መጫወት ይችላሉ!`, { parse_mode: "Markdown" });
-  } else {
-    await ctx.reply("❓ እባክዎ ካሉት አማራጮች አንዱን ቁልፍ ይጫኑ ወይም የቴሌብር SMS መልእክቱን ይላኩ።");
-  }
-});
-
-// Render የወደብ ፖርት ማስከፈቻ (Keep Alive)
+// Render ሰርቨር ማስገደጃ
 const app = express();
-app.get("/", (req, res) => res.send("Bot is Active!"));
-app.listen(process.env.PORT || 10000, "0.0.0.0");
-
-bot.start();
+app.get("/", (req, res) => res.send("Engine Running"));
+app.listen(process.env.PORT || 10000, "0.0.0.0", () => {
+  startBotEngine();
+});
