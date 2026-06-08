@@ -6,7 +6,7 @@ const TELEBIRR_NUMBER = "0903069581";
 const MERCHANT_NAME = "GURSHA MATRIX";
 const MINI_APP_URL = "https://bayeamlaku565-cloud.github.io/gursha-matrix-bot/";
 // ⚠️ እዚህ ጋ ያንተን ትክክለኛ የቻናል መጋበዣ ሊንክ (Invite Link) አስገባ
-const CHANNEL_URL = "https://t.me/Larrybrezzyeee"; 
+const CHANNEL_URL = "https://t.me/MyAird_09"; 
 
 const bot = new Bot(BOT_TOKEN);
 const usedTxIds = new Set();
