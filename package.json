@@ -1,0 +1,12 @@
+{
+  "name": "gursha-matrix-bot",
+  "version": "1.0.0",
+  "description": "Gursha Matrix 4-Digit Telegram Mini App Bot",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "grammy": "^1.21.1"
+  }
+}
