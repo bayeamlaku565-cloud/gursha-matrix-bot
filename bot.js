@@ -5,7 +5,7 @@ const BOT_TOKEN = "8833378757:AAHb7x04h9y3YdwQ4-tji4w8srxN94sOXcg";
 const TELEBIRR_NUMBER = "0903069581";
 const MERCHANT_NAME = "GURSHA MATRIX";
 const MINI_APP_URL = "https://bayeamlaku565-cloud.github.io/gursha-matrix-bot/";
-const CHANNEL_URL = "https://t.me/Larrybrezzyeee"; 
+const CHANNEL_URL = "https://t.me/Gurshamatrix"; 
 
 // 📸 ያንተ የጉርሻ ላኪ መለያ አርማ (Telegram File ID) - ሊንኩ እንዳይበላሽ በቋሚ መለያ ተተክቷል
 const BOT_PHOTO_ID = "AgACAgQAAxkBAAEB_0lmZXg2C-FjN6I56R-u48xN94sOXcgAC8bIxG_GFAVEMgABO7m-8w0BAAMCAANtAAM0BA";
