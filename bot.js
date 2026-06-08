@@ -5,8 +5,8 @@ const BOT_TOKEN = "8833378757:AAHb7x04h9y3YdwQ4-tji4w8srxN94sOXcg";
 const TELEBIRR_NUMBER = "0903069581";
 const MERCHANT_NAME = "GURSHA MATRIX";
 const MINI_APP_URL = "https://bayeamlaku565-cloud.github.io/gursha-matrix-bot/";
-// ⚠️ እዚህ ጋ ያንተን ትክክለኛ የቻናል መጋበዣ ሊንክ ማስገባት ትችላለህ
-const CHANNEL_URL = "https://t.me/MyAird_09"; 
+// ⚠️ እዚህ ጋ ያንተን ትክክለኛ የቻናል መጋበዣ ሊንክ (Invite Link) አስገባ
+const CHANNEL_URL = "https://t.me/Larrybrezzyeee"; 
 
 const bot = new Bot(BOT_TOKEN);
 const usedTxIds = new Set();
@@ -22,10 +22,11 @@ server.listen(PORT, () => {
 });
 
 bot.command("start", async (ctx) => {
+  // የቁልፎቹ ስም እና ኢሞጂ እዚህ ጋ ፍጹም ሆነው ተስተካክለዋል
   const keyboard = new InlineKeyboard()
     .webApp("🕹️ ወደ ማትሪክስ ጦርነት ግባ", MINI_APP_URL)
     .row()
-    .url("📢 የጉርሻ ቻናል", CHANNEL_URL);
+    .url("📢 የጉርሻ ማትሪክስ ቻናል 🚀", CHANNEL_URL);
 
   // የድሮ ቁልፎችን ሙሉ በሙሉ ማጽጃ
   await ctx.reply("⏳ የድሮው ሲስተም እየጸዳ ነው...", {
@@ -63,11 +64,11 @@ bot.on("message:text", async (ctx) => {
     const amount = parseFloat(amountMatch[1]);
 
     if (usedTxIds.has(txId)) {
-      return ctx.reply("⚠️ ይህ የግብይት ቁጥር ቀደም ብሎ ጥቅም ላይ ውሏል!");
+      return ctx.reply("⚠️ ይህ የግብይት ቁጥር ቀደም ብሎ ጥቅም ላይ ህሏል!");
     }
     
     usedTxIds.add(txId);
-    await ctx.reply(`🎉 **የቴሌብር ማረጋገጫ ተጠናቋል!**\n💰 መጠን: **${amount} ETB**\n🔑 ID: \`${txId}\`\n\nወደ ሚኒ አፑ በመመለስ መጫወት ይችላሉ!`, { parse_mode: "Markdown" });
+    await ctx.reply(`🎉 **የቴሌብር ማረጋገጫ ተጠናቆአል!**\n💰 መጠን: **${amount} ETB**\n🔑 ID: \`${txId}\`\n\nወደ ሚኒ አፑ በመመለስ መጫወት ይችላሉ!`, { parse_mode: "Markdown" });
   } else {
     await ctx.reply("❓ እባክዎ የቴሌብር SMS መልእክቱን ሙሉ በሙሉ ኮፒ አድርገው እዚህ ይላኩት። ለመጫወት /start ብለው ይጻፉ።");
   }
